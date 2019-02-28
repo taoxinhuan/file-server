@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}">...</div>
+
+
+<div th:if="${message}">
+    <h2 th:text="${message}"/>
+</div>
+
+<div>
+    <form method="POST" enctype="multipart/form-data" action="/upload">
+        <table>
+            <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
+            <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+        </table>
+    </form>
+</div>
+
+<div>    
+    <table border="1">
+    <thead>
+    <tr>
+        <td>ID</td>
+        <td>FileName</td>
+        <td>NowName</td>
+        <td>SavePath</td>
+        <td>Url</td>
+        <td>FileType</td>
+        <td>FileSize</td>
+        <td>UploadTime</td>
+        <td>预览</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${files.size()} eq 0">
+        <td colspan="3">暂时无文件信息~~</td>
+    </tr>
+    <tr th:each="file : ${files}">
+        <td th:text="${file.id}" ></td>
+        <td><a th:href="'files/'+${file.id}" th:text="${file.filename}"/></td>
+        <td th:text="${file.nowname}" ></td>
+        <td th:text="${file.savepath}" ></td>
+        <td th:text="${file.url}" > </td>
+        <td th:text="${file.filetype}" ></td>
+        <td th:text="${file.filesize}" ></td>
+        <td th:text="${file.uploadtime}" ></td>
+        <td >
+        <img style="height:50px;height:50px" th:src="'files/'+${file.id}">
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}">...</div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kevin.mapper.FilesMapper" >
+  <resultMap id="BaseResultMap" type="com.kevin.entity.Files" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="file_name" property="filename" jdbcType="VARCHAR" />
+    <result column="now_name" property="nowname" jdbcType="VARCHAR" />
+    <result column="save_path" property="savepath" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="file_type" property="filetype" jdbcType="VARCHAR" />
+    <result column="file_size" property="filesize" jdbcType="VARCHAR" />
+    <result column="upload_time" property="uploadtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, file_name, now_name, save_path, url, file_type, file_size, upload_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from files
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from files
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="com.kevin.entity.Files" >
+     <selectKey keyProperty="id" resultType="java.lang.Long" order="BEFORE">
+            select uuid_short()
+    </selectKey>
+    insert into files   
+    (<include refid="Base_Column_List" />)
+    values (#{id,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR}, #{nowname,jdbcType=VARCHAR}, 
+      #{savepath,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{filetype,jdbcType=VARCHAR}, 
+      #{filesize,jdbcType=VARCHAR}, #{uploadtime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kevin.entity.Files" >
+    update files
+    <set >
+      <if test="file_name != null" >
+        file_name = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="now_name != null" >
+        now_name = #{nowname,jdbcType=VARCHAR},
+      </if>
+      <if test="save_path != null" >
+        save_path = #{savepath,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="file_type != null" >
+        file_type = #{filetype,jdbcType=VARCHAR},
+      </if>
+      <if test="file_size != null" >
+        file_size = #{filesize,jdbcType=VARCHAR},
+      </if>
+      <if test="upload_time != null" >
+        upload_time = #{uploadtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kevin.entity.Files" >
+    update files
+    set file_name = #{filename,jdbcType=VARCHAR},
+      now_name = #{nowname,jdbcType=VARCHAR},
+      save_path = #{savepath,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      file_type = #{filetype,jdbcType=VARCHAR},
+      file_size = #{filesize,jdbcType=VARCHAR},
+      upload_time = #{uploadtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findAll" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM files
+    ORDER BY upload_time DESC
+  </select>
+</mapper>
